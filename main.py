@@ -26,10 +26,6 @@ def init_db():
     conn.commit()
     conn.close()
 
-@app.before_first_request
-def setup():
-    init_db()
-
 @app.route('/get_profile')
 def get_profile():
     user_id = request.args.get('user_id')
