@@ -4,11 +4,31 @@ import os
 
 app = Flask(__name__)
 
+DB_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), 'users.db'))
+
 def get_db_connection():
-    db_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'users.db'))
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
+
+def init_db():
+    conn = get_db_connection()
+    conn.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            user_id INTEGER PRIMARY KEY,
+            gender TEXT,
+            age INTEGER,
+            weight REAL,
+            height REAL,
+            goal TEXT
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+@app.before_first_request
+def setup():
+    init_db()
 
 @app.route('/get_profile')
 def get_profile():
@@ -47,4 +67,5 @@ def save_profile():
     return jsonify({"status": "ok"})
 
 if __name__ == '__main__':
+    init_db()
     app.run(host='0.0.0.0', port=5000)
