@@ -4,7 +4,8 @@ import os
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+
 
 app = Flask(__name__)
 
@@ -64,6 +65,7 @@ def save_profile():
     ))
     conn.commit()
     conn.close()
+    print('Получаем данные:', data)
     return jsonify({"status": "ok"})
 
 if __name__ == '__main__':
