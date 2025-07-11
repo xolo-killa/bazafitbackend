@@ -6,10 +6,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
-
-app = Flask(__name__)
-
-DB_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), 'users.db'))
+DB_PATH = '/tmp/users.db'
 
 def get_db_connection():
     conn = sqlite3.connect(DB_PATH)
@@ -30,6 +27,9 @@ def init_db():
     ''')
     conn.commit()
     conn.close()
+
+# 💥 ВЫЗЫВАЕМ init_db ПРИ КАЖДОМ ЗАПУСКЕ, НЕ ТОЛЬКО ЛОКАЛЬНО
+init_db()
 
 @app.route('/get_profile')
 def get_profile():
@@ -65,9 +65,10 @@ def save_profile():
     ))
     conn.commit()
     conn.close()
-    print('Получаем данные:', data)
+    print('✅ Получены и сохранены данные:', data)
     return jsonify({"status": "ok"})
 
-if __name__ == '__main__':
-    init_db()
-    app.run(host='0.0.0.0', port=5000)
+
+# if __name__ == '__main__':
+#     init_db()
+#     app.run(host='0.0.0.0', port=5000)
