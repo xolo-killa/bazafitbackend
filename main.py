@@ -6,7 +6,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
-DB_PATH = os.path.join(os.path.dirname(__file__), 'users.db')
+DB_PATH = '/tmp/users.db'
 
 def get_db_connection():
     conn = sqlite3.connect(DB_PATH)
