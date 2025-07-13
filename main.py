@@ -56,17 +56,18 @@ def save_profile():
             height=excluded.height,
             goal=excluded.goal
     ''', (
-        data['user_id'],
-        data['gender'],
-        data['age'],
-        data['weight'],
-        data['height'],
-        data['goal']
+        data.get('user_id'),
+        data.get('gender'),
+        data.get('age'),
+        data.get('weight'),
+        data.get('height'),
+        data.get('goal')
     ))
     conn.commit()
     conn.close()
     print('✅ Получены и сохранены данные:', data)
     return jsonify({"status": "ok"})
+
 
 
 if __name__ == '__main__':
